@@ -19,7 +19,18 @@ app.use(bodyParser.urlencoded({extended: false}))
 // app.use(bodyParser.json)
 
 // rotas 
-app.get('/', (req, res) => res.render("index.ejs"))
+app.get('/', (req, res) =>{
+    //pesquisando perguntas e armazenando em uma variável. jogando para a pág home
+    Pergunta.findAll({raw: true, order:[
+        ['id','desc']]}).then(perguntas => 
+            {res.render('index.ejs', 
+            {
+            perguntas: perguntas
+        })
+    })
+});
+
+
 app.get('/perguntar', (req, res)=> res.render('perguntar.ejs'))
 
 //rota que recebe infos do formulário
@@ -34,6 +45,20 @@ app.post("/salvarpergunta", (req, res) => {
     // se salva com sucesso redireciona para a home
     .then(()=>{ 
         res.redirect('/')
+    })
+});
+
+//acessando pergunta por id
+app.get('pergunta/:id', (req, res) =>{
+    var id = req.params.id;
+    Pergunta.findOne({
+        where: {id: id}
+    }).then(pergunta => {
+        if(pergunta != undefined){
+
+        }else{
+            
+        }
     })
 });
     
