@@ -1,7 +1,8 @@
 const express = require('express'); 
 const app = express();
-const bodyParser = require('body-parser')
-const Pergunta = require('./models/Pergunta')
+const bodyParser = require('body-parser');
+const Pergunta = require('./models/Pergunta');
+const Resposta = require('./models/Resposta');
 
 //CONECTANDO O DB 
 const connection = require('./database/database');
@@ -49,15 +50,17 @@ app.post("/salvarpergunta", (req, res) => {
 });
 
 //acessando pergunta por id
-app.get('pergunta/:id', (req, res) =>{
+app.get('/pergunta/:id', (req, res) =>{
     var id = req.params.id;
     Pergunta.findOne({
         where: {id: id}
     }).then(pergunta => {
         if(pergunta != undefined){
-
+            res.render('pergunta.ejs',{
+                pergunta:pergunta
+            })
         }else{
-            
+            res.redirect('/')
         }
     })
 });
